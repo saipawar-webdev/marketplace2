@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maison Éclat — Add Product</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F9F7F4;
+      --surface: #FFFFFF;
+      --ink: #1a1a1a;
+      --ink-soft: #888580;
+      --rule: #E8E5E1;
+      --accent: #B8A898;
+      --accent-light: #EDE8E3;
+      --success: #4A7C59;
+      --success-bg: #EEF4F0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 3.5rem 4rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .header-meta {
+      text-align: right;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      line-height: 2;
+    }
+    .btn-back {
+      display: inline-block;
+      margin-top: 0.9rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink-soft);
+      border: 1px solid var(--rule);
+      padding: 0.55rem 1.3rem;
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.22s, color 0.22s, border-color 0.22s;
+      white-space: nowrap;
+    }
+    .btn-back:hover {
+      background: var(--accent-light);
+      color: var(--ink);
+      border-color: var(--accent);
+    }
+    .nav-strip {
+      display: flex;
+      gap: 2.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--rule);
+      align-items: center;
+    }
+    .nav-strip a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.2s;
+    }
+    .nav-strip a:hover { color: var(--ink); }
+    .breadcrumb-sep { color: var(--rule); }
+    .nav-strip .current-page {
+      color: var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px;
+    }
+
+    /* ── Page layout ── */
+    .page-body {
+      padding: 3rem 4rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    /* ── Left column — page intro ── */
+    .page-intro {}
+    .page-intro-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .page-intro h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.03em;
+    }
+    .page-intro p {
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+      max-width: 280px;
+    }
+    .intro-divider {
+      width: 2rem;
+      height: 1px;
+      background: var(--rule);
+      margin: 2rem 0;
+    }
+    .intro-note {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      line-height: 1.9;
+    }
+
+    /* ── Right column — form ── */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      padding: 2.8rem 3rem;
+      animation: appear 0.5s ease both;
+    }
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-section-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.6rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .form-row.single { grid-template-columns: 1fr; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.4rem;
+    }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    label .req {
+      color: var(--accent);
+      margin-left: 0.2rem;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="number"],
+    select,
+    textarea {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      padding: 0.75rem 1rem;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    input::placeholder,
+    textarea::placeholder { color: var(--rule); }
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+      line-height: 1.6;
+    }
+
+    /* Custom select arrow */
+    .select-wrap {
+      position: relative;
+    }
+    .select-wrap::after {
+      content: '↓';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75rem;
+      color: var(--accent);
+      pointer-events: none;
+      letter-spacing: 0;
+    }
+    .select-wrap select { padding-right: 2.5rem; }
+
+    .field-hint {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      line-height: 1.5;
+    }
+
+    .form-separator {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 2rem 0;
+    }
+
+    /* ── Submit area ── */
+    .submit-area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2.4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+      gap: 1.5rem;
+    }
+    .submit-note {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .btn-submit {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      border: 1px solid var(--ink);
+      padding: 0.85rem 2.4rem;
+      cursor: pointer;
+      transition: background 0.22s, color 0.22s, border-color 0.22s, opacity 0.22s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-submit:hover:not(:disabled) {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ── Success overlay ── */
+    .success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(249,247,244,0.92);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.35s ease both;
+    }
+    .success-overlay.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .success-card {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      padding: 3.5rem 4rem;
+      text-align: center;
+      max-width: 440px;
+      width: 90%;
+      animation: slideUp 0.4s cubic-bezier(.25,.46,.45,.94) both;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .success-icon {
+      font-size: 1.5rem;
+      color: var(--success);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+    .success-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 1.8rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 0.8rem;
+    }
+    .success-card p {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      margin-bottom: 0.4rem;
+    }
+    .success-card .redirect-note {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 1.6rem;
+    }
+    .success-progress {
+      width: 100%;
+      height: 1px;
+      background: var(--rule);
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+    .success-progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 2.8s linear;
+    }
+
+    /* ── Error message ── */
+    .form-error {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #D4A898;
+      background: #FDF4F2;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: #8B4A3C;
+      line-height: 1.7;
+    }
+    .form-error.active { display: block; }
+
+    /* ── Loading spinner inline ── */
+    .btn-spinner {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgba(249,247,244,0.4);
+      border-top-color: rgba(249,247,244,0.9);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 0.6rem;
+      vertical-align: middle;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin: 0 4rem;
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    footer .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1000px) {
+      .page-body { grid-template-columns: 1fr; gap: 2.5rem; }
+      .page-intro p { max-width: 100%; }
+    }
+    @media (max-width: 900px) {
+      header, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .page-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+    @media (max-width: 640px) {
+      header { padding: 2rem 1.2rem 0; }
+      .page-body { padding: 2rem 1.2rem 4rem; }
+      footer { margin: 0 1.2rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+      .form-card { padding: 1.8rem 1.4rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .submit-area { flex-direction: column; align-items: flex-start; }
+      .btn-submit { width: 100%; text-align: center; }
+      .success-card { padding: 2.5rem 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="header-top">
+    <a href="index.html" class="brand">Maison&nbsp;Éclat</a>
+    <div class="header-meta">
+      <div>Spring — 2026</div>
+      <div>Collection Manager</div>
+      <a href="index.html" class="btn-back">← Back to Collection</a>
+    </div>
+  </div>
+  <nav class="nav-strip">
+    <a href="index.html">All Pieces</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="current-page">Enter Product</span>
+  </nav>
+</header>
+
+<!-- ── Main content ── -->
+<div class="page-body">
+
+  <!-- Left: intro -->
+  <div class="page-intro">
+    <div class="page-intro-label">Collection Management</div>
+    <h1>Add a new piece to the collection</h1>
+    <p>Fill in the product details below. Once submitted, the piece will appear in the live collection after the Google Sheet is updated.</p>
+    <div class="intro-divider"></div>
+    <div class="intro-note">
+      <div>Fields marked <span style="color:var(--accent)">*</span> are required</div>
+      <div style="margin-top:0.4rem">Images are linked by URL</div>
+      <div style="margin-top:0.4rem">Badges are optional</div>
+    </div>
+  </div>
+
+  <!-- Right: form -->
+  <div class="form-card" id="form-card">
+
+    <!-- Section 1: Core details -->
+    <div class="form-section-title">Product Details</div>
+
+    <div class="form-row">
+      <div class="field">
+        <label for="f-name">Name <span class="req">*</span></label>
+        <input type="text" id="f-name" name="name" placeholder="e.g. Soleil Ring" autocomplete="off" required/>
+      </div>
+      <div class="field">
+        <label for="f-category">Category <span class="req">*</span></label>
+        <div class="select-wrap">
+          <select id="f-category" name="category" required>
+            <option value="" disabled selected>Select category</option>
+            <option value="Rings">Rings</option>
+            <option value="Earrings">Earrings</option>
+            <option value="Necklaces">Necklaces</option>
+            <option value="Bracelets">Bracelets</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label for="f-price">Price <span class="req">*</span></label>
+        <input type="text" id="f-price" name="price" placeholder="e.g. €420" autocomplete="off" required/>
+        <span class="field-hint">Include currency symbol</span>
+      </div>
+      <div class="field">
+        <label for="f-badge">Badge</label>
+        <input type="text" id="f-badge" name="badge" placeholder="e.g. New Arrival" autocomplete="off"/>
+        <span class="field-hint">Leave blank for none</span>
+      </div>
+    </div>
+
+    <hr class="form-separator"/>
+
+    <!-- Section 2: Image -->
+    <div class="form-section-title">Image</div>
+
+    <div class="form-row single">
+      <div class="field">
+        <label for="f-img">Image URL <span class="req">*</span></label>
+        <input type="url" id="f-img" name="img" placeholder="https://…" autocomplete="off" required/>
+        <span class="field-hint">Direct link to a publicly accessible image (JPEG, PNG, WebP)</span>
+      </div>
+    </div>
+
+    <!-- Image preview -->
+    <div id="img-preview-wrap" style="display:none; margin-bottom:1.4rem;">
+      <div style="font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:0.5rem;">Preview</div>
+      <img id="img-preview" src="" alt="Preview" style="max-width:120px;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--rule);display:block;"/>
+    </div>
+
+    <hr class="form-separator"/>
+
+    <!-- Error message -->
+    <div class="form-error" id="form-error"></div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <div class="submit-note">
+        Data is submitted to your Google Sheet<br>via Apps Script.
+      </div>
+      <button class="btn-submit" id="btn-submit" type="button">Submit Product</button>
+    </div>
+
+  </div><!-- /form-card -->
+</div><!-- /page-body -->
+
+<footer>
+  <div class="footer-brand">Maison Éclat</div>
+  <div>© 2026 — All rights reserved</div>
+  <div>Returns within 30 days</div>
+</footer>
+
+<!-- ── Success overlay ── -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-card">
+    <div class="success-icon">✦</div>
+    <h2>Product Added</h2>
+    <p>The piece has been submitted to your collection.</p>
+    <p>It will appear in the gallery once the sheet refreshes.</p>
+    <div class="redirect-note">Returning to collection…</div>
+    <div class="success-progress">
+      <div class="success-progress-bar" id="progress-bar"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG — paste your Google Apps Script Web App URL here ──────────────
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby-uO3aJB-Ed7gzWO6n119GbkcS3734wf6ciCfiXEeDrGQWa3AT5NIW78ogGQdEVfo/exec";
+
+  // ── Image preview ─────────────────────────────────────────────────────────
+  const imgInput = document.getElementById('f-img');
+  const imgPreviewWrap = document.getElementById('img-preview-wrap');
+  const imgPreview = document.getElementById('img-preview');
+
+  let previewDebounce;
+  imgInput.addEventListener('input', () => {
+    clearTimeout(previewDebounce);
+    previewDebounce = setTimeout(() => {
+      const val = imgInput.value.trim();
+      if (val.startsWith('http')) {
+        imgPreview.src = val;
+        imgPreviewWrap.style.display = 'block';
+        imgPreview.onerror = () => { imgPreviewWrap.style.display = 'none'; };
+        imgPreview.onload  = () => { imgPreviewWrap.style.display = 'block'; };
+      } else {
+        imgPreviewWrap.style.display = 'none';
+      }
+    }, 600);
+  });
+
+  // ── Form submission ───────────────────────────────────────────────────────
+  const btn = document.getElementById('btn-submit');
+  const errorBox = document.getElementById('form-error');
+
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.classList.add('active');
+    errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function clearError() {
+    errorBox.textContent = '';
+    errorBox.classList.remove('active');
+  }
+
+  function getField(id) {
+    return document.getElementById(id).value.trim();
+  }
+
+  btn.addEventListener('click', async () => {
+    clearError();
+
+    // Basic validation
+    const name     = getField('f-name');
+    const category = getField('f-category');
+    const price    = getField('f-price');
+    const img      = getField('f-img');
+    const badge    = getField('f-badge');
+
+    if (!name)     { showError('Please enter a product name.'); return; }
+    if (!category) { showError('Please select a category.'); return; }
+    if (!price)    { showError('Please enter a price.'); return; }
+    if (!img)      { showError('Please provide an image URL.'); return; }
+
+    if (WEB_APP_URL === "PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+      showError('No Apps Script URL configured. Please set WEB_APP_URL in the script before submitting.');
+      return;
+    }
+
+    // Loading state
+    btn.disabled = true;
+    btn.innerHTML = '<span class="btn-spinner"></span>Submitting…';
+
+    // Build URL params — variable names match the CSV column headers
+    const params = new URLSearchParams({ name, category, price, img, badge });
+
+    try {
+      const res = await fetch(`${WEB_APP_URL}?${params.toString()}`, {
+        method: 'GET', // Apps Script GET-based web app
+        mode: 'no-cors' // Google Apps Script requires no-cors
+      });
+
+      // no-cors means we can't read the response body, but if no throw — success
+      showSuccess();
+    } catch (err) {
+      console.error('Submission error:', err);
+      btn.disabled = false;
+      btn.textContent = 'Submit Product';
+      showError('Submission failed — please check your connection and try again.');
+    }
+  });
+
+  // ── Success + redirect ────────────────────────────────────────────────────
+  function showSuccess() {
+    const overlay = document.getElementById('success-overlay');
+    overlay.classList.add('active');
+
+    // Animate progress bar then redirect
+    requestAnimationFrame(() => {
+      document.getElementById('progress-bar').style.width = '100%';
+    });
+
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
