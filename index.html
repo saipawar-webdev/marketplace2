@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maison Éclat — Jewellery</title>
+  <link rel="icon" type="image/jpeg" href="logo.jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F9F7F4;
+      --surface: #FFFFFF;
+      --ink: #1a1a1a;
+      --ink-soft: #888580;
+      --rule: #E8E5E1;
+      --accent: #B8A898;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 3.5rem 4rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .header-meta {
+      text-align: right;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      line-height: 2;
+    }
+
+    /* ── Enter Product button ── */
+    .btn-enter {
+      display: inline-block;
+      margin-top: 0.9rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--rule);
+      padding: 0.55rem 1.3rem;
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.22s, color 0.22s, border-color 0.22s;
+      white-space: nowrap;
+    }
+    .btn-enter:hover {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav {
+      display: flex;
+      gap: 2.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.2s;
+    }
+    .nav a:hover, .nav a.active { color: var(--ink); }
+    .nav a.active { border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+
+    .section-label {
+      padding: 2.5rem 4rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .section-label h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      letter-spacing: 0.06em;
+    }
+    .section-label span {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--rule);
+      border-left: 1px solid var(--rule);
+      margin: 0 4rem;
+    }
+
+    .card {
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      cursor: pointer;
+      position: relative;
+      background: var(--surface);
+      animation: appear 0.6s ease both;
+    }
+    @keyframes appear {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .card:nth-child(1) { animation-delay: 0.00s; }
+    .card:nth-child(2) { animation-delay: 0.08s; }
+    .card:nth-child(3) { animation-delay: 0.16s; }
+    .card:nth-child(4) { animation-delay: 0.24s; }
+    .card:nth-child(5) { animation-delay: 0.32s; }
+    .card:nth-child(6) { animation-delay: 0.40s; }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      position: relative;
+      background: #F0EDE9;
+    }
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(.25,.46,.45,.94), filter 0.5s;
+      filter: saturate(0.85);
+    }
+    .card:hover .card-img img {
+      transform: scale(1.04);
+      filter: saturate(1);
+    }
+    .card-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(249,247,244,0.08);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .card:hover .card-img::after { opacity: 1; }
+
+    .card-action {
+      position: absolute;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+      background: rgba(249,247,244,0.92);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--rule);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      padding: 0.55rem 1.4rem;
+      cursor: pointer;
+    }
+    .card:hover .card-action {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background: rgba(249,247,244,0.85);
+      backdrop-filter: blur(4px);
+      padding: 0.3rem 0.7rem;
+      z-index: 2;
+    }
+
+    .card-body { padding: 1.2rem 1.4rem 1.4rem; }
+    .card-category {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 0.7rem;
+      line-height: 1.2;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .price {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: var(--ink);
+    }
+    .price-old {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: line-through;
+      margin-left: 0.5rem;
+    }
+    .wishlist {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 0.9rem;
+      padding: 0.2rem;
+      transition: color 0.2s, transform 0.2s;
+      line-height: 1;
+    }
+    .wishlist:hover { color: var(--ink); transform: scale(1.15); }
+
+    /* Loading & error states */
+    .grid-loading {
+      margin: 0 4rem;
+      padding: 4rem 0;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .grid-error {
+      margin: 0 4rem;
+      padding: 4rem 0;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    footer {
+      margin: 4rem 4rem 0;
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    footer .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+    }
+
+    @media (max-width: 900px) {
+      header, .section-label, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .grid { margin: 0 1.5rem; grid-template-columns: repeat(2, 1fr); }
+      .grid-loading, .grid-error { margin: 0 1.5rem; }
+    }
+    @media (max-width: 560px) {
+      header { padding: 2rem 1.2rem 0; }
+      .section-label { padding: 1.5rem 1.2rem 1rem; }
+      .grid { margin: 0 1.2rem; grid-template-columns: 1fr; }
+      .grid-loading, .grid-error { margin: 0 1.2rem; }
+      footer { margin: 2.5rem 1.2rem 0; flex-direction: column; gap: 0.8rem; text-align: center; }
+      .btn-enter { margin-top: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">Maison&nbsp;Éclat</div>
+    <div class="header-meta">
+      <div>Spring — 2026</div>
+      <div id="piece-count">— pieces</div>
+      <a href="add-product.html" class="btn-enter">Enter Product</a>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#" class="active" data-filter="all">All</a>
+    <a href="#" data-filter="Rings">Rings</a>
+    <a href="#" data-filter="Earrings">Earrings</a>
+    <a href="#" data-filter="Necklaces">Necklaces</a>
+    <a href="#" data-filter="Bracelets">Bracelets</a>
+  </nav>
+</header>
+
+<div class="section-label">
+  <h2>Current Collection</h2>
+  <span>Complimentary gift wrapping</span>
+</div>
+
+<div id="grid-container">
+  <p class="grid-loading">Loading collection…</p>
+</div>
+
+<footer>
+  <div class="footer-brand">Maison Éclat</div>
+  <div>© 2026 — All rights reserved</div>
+  <div>Returns within 30 days</div>
+</footer>
+
+<script>
+  const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVWdxCTgWF0xbSiYBW8c8pKlU7WUDUVObLw4QyrrqfTgbABGnts9J5EC6fUhVnZHcBmcUSjB14hLJw/pub?output=csv';
+
+  // ── CSV parser (handles quoted fields) ───────────────────────────────────
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines[0].split(',').map(h => h.trim());
+    return lines.slice(1).map(line => {
+      const cols = [];
+      let cur = '', inQuote = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { inQuote = !inQuote; }
+        else if (ch === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; }
+        else { cur += ch; }
+      }
+      cols.push(cur.trim());
+      return Object.fromEntries(headers.map((h, i) => [h, cols[i] ?? '']));
+    });
+  }
+
+  // ── Card builder ─────────────────────────────────────────────────────────
+  function buildCard(item, idx) {
+    const hasBadge = item.badge && item.badge.toLowerCase() !== 'null' && item.badge.trim() !== '';
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.category = item.category || '';
+    card.style.animationDelay = (idx * 0.08) + 's';
+
+    card.innerHTML = `
+      <div class="card-img">
+        <img src="${item.img}" alt="${item.name}" loading="lazy"/>
+        ${hasBadge ? `<span class="badge">${item.badge}</span>` : ''}
+        <button class="card-action">Add to Cart</button>
+      </div>
+      <div class="card-body">
+        <div class="card-category">${item.category}</div>
+        <div class="card-name">${item.name}</div>
+        <div class="card-footer">
+          <span class="price">${item.price}</span>
+          <button class="wishlist">♡</button>
+        </div>
+      </div>
+    `;
+
+    // Wishlist toggle
+    const wl = card.querySelector('.wishlist');
+    wl.addEventListener('click', e => {
+      e.stopPropagation();
+      wl.textContent = wl.textContent === '♡' ? '♥' : '♡';
+      wl.style.color = wl.textContent === '♥' ? 'var(--ink)' : 'var(--accent)';
+    });
+
+    // Fallback image
+    const imgEl = card.querySelector('img');
+    imgEl.onerror = function() {
+      this.onerror = null;
+      this.src = 'https://picsum.photos/seed/' + encodeURIComponent(item.name) + '/600/800';
+    };
+
+    return card;
+  }
+
+  // ── Filter logic ──────────────────────────────────────────────────────────
+  let allProducts = [];
+
+  function renderGrid(filter) {
+    const container = document.getElementById('grid-container');
+    const products = filter === 'all'
+      ? allProducts
+      : allProducts.filter(p => p.category === filter);
+
+    container.innerHTML = '';
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    products.forEach((item, i) => grid.appendChild(buildCard(item, i)));
+    container.appendChild(grid);
+  }
+
+  // ── Nav filter wiring ─────────────────────────────────────────────────────
+  document.querySelectorAll('.nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+      renderGrid(link.dataset.filter);
+    });
+  });
+
+  // ── Fetch & init ──────────────────────────────────────────────────────────
+  async function loadProducts() {
+    const container = document.getElementById('grid-container');
+    try {
+      const res = await fetch(SHEET_CSV);
+      if (!res.ok) throw new Error('Network response was not ok');
+      const csv = await res.text();
+      allProducts = parseCSV(csv).filter(p => p.name); // skip blank rows
+
+      // Update piece count in header
+      document.getElementById('piece-count').textContent = allProducts.length + ' piece' + (allProducts.length !== 1 ? 's' : '');
+
+      renderGrid('all');
+    } catch (err) {
+      console.error('Failed to load sheet:', err);
+      container.innerHTML = '<p class="grid-error">Could not load collection — please refresh.</p>';
+    }
+  }
+
+  loadProducts();
+</script>
+
+</body>
+</html>
